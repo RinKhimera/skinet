@@ -7,78 +7,76 @@ namespace Infrastructure.Data;
 
 public class ProductRepository(StoreContext context) : IProductRepository
 {
-
-  public void AddProduct(Product product)
-  {
-    context.Products.Add(product);
-  }
-
-  public void DeleteProduct(Product product)
-  {
-    context.Products.Remove(product);
-  }
-
-  public async Task<IReadOnlyList<string>> GetBrandsAsync()
-  {
-    return await context.Products.Select(x => x.Brand)
-    .Distinct()
-    .ToListAsync();
-  }
-
-  public async Task<Product?> GetProductByIdAsync(int id)
-  {
-    return await context.Products.FindAsync(id);
-  }
-
-  public async Task<IReadOnlyList<Product>> GetProductsAsync(string? brand, string? type, string? sort)
-  {
-    var query = context.Products.AsQueryable();
-
-    if (!string.IsNullOrWhiteSpace(brand))
+    public void AddProduct(Product product)
     {
-      query = query.Where(x => x.Brand == brand);
+        context.Products.Add(product);
     }
 
-    if (!string.IsNullOrWhiteSpace(type))
+    public void DeleteProduct(Product product)
     {
-      query = query.Where(x => x.Type == type);
+        context.Products.Remove(product);
     }
 
-
-    query = sort switch
+    public async Task<Product?> GetProductByIdAsync(int id)
     {
-      // Trie les produits par prix croissant si "priceAsc" est spécifié
-      "priceAsc" => query.OrderBy(x => x.Price),
+        return await context.Products.FindAsync(id);
+    }
 
-      // Trie les produits par prix décroissant si "priceDesc" est spécifié
-      "priceDesc" => query.OrderByDescending(x => x.Price),
+    public async Task<IReadOnlyList<Product>> GetProductsAsync(
+        string? brand,
+        string? type,
+        string? sort
+    )
+    {
+        var query = context.Products.AsQueryable();
 
-      // Trie les produits par nom par défaut si aucun critère de tri spécifique n'est fourni
-      _ => query.OrderBy(x => x.Name)
-    };
+        if (!string.IsNullOrWhiteSpace(brand))
+        {
+            query = query.Where(x => x.Brand == brand);
+        }
 
-    return await query.ToListAsync();
-  }
+        if (!string.IsNullOrWhiteSpace(type))
+        {
+            query = query.Where(x => x.Type == type);
+        }
 
-  public async Task<IReadOnlyList<string>> GetTypesAsync()
-  {
-    return await context.Products.Select(x => x.Type)
-    .Distinct()
-    .ToListAsync();
-  }
+        query = sort switch
+        {
+            // Trie les produits par prix croissant si "priceAsc" est spécifié
+            "priceAsc" => query.OrderBy(x => x.Price),
 
-  public bool ProductExists(int id)
-  {
-    return context.Products.Any(x => x.Id == id);
-  }
+            // Trie les produits par prix décroissant si "priceDesc" est spécifié
+            "priceDesc" => query.OrderByDescending(x => x.Price),
 
-  public async Task<bool> SaveChangesAsync()
-  {
-    return await context.SaveChangesAsync() > 0;
-  }
+            // Trie les produits par nom par défaut si aucun critère de tri spécifique n'est fourni
+            _ => query.OrderBy(x => x.Name),
+        };
 
-  public void UpdateProduct(Product product)
-  {
-    context.Entry(product).State = EntityState.Modified;
-  }
+        return await query.ToListAsync();
+    }
+
+    public async Task<IReadOnlyList<string>> GetBrandsAsync()
+    {
+        return await context.Products.Select(x => x.Brand).Distinct().ToListAsync();
+    }
+
+    public async Task<IReadOnlyList<string>> GetTypesAsync()
+    {
+        return await context.Products.Select(x => x.Type).Distinct().ToListAsync();
+    }
+
+    public bool ProductExists(int id)
+    {
+        return context.Products.Any(x => x.Id == id);
+    }
+
+    public async Task<bool> SaveChangesAsync()
+    {
+        return await context.SaveChangesAsync() > 0;
+    }
+
+    public void UpdateProduct(Product product)
+    {
+        context.Entry(product).State = EntityState.Modified;
+    }
 }

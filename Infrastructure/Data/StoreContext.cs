@@ -8,16 +8,16 @@ namespace Infrastructure.Data;
 // Définition de la classe StoreContext qui hérite de DbContext
 public class StoreContext(DbContextOptions options) : DbContext(options)
 {
-  // Définition de la propriété DbSet pour les produits
-  public required DbSet<Product> Products { get; set; }
+    // Définition de la propriété DbSet pour les produits
+    public required DbSet<Product> Products { get; set; }
 
-  // Méthode appelée lors de la création du modèle
-  protected override void OnModelCreating(ModelBuilder modelBuilder)
-  {
-    // Appel de la méthode de base
-    base.OnModelCreating(modelBuilder);
+    // Méthode appelée lors de la création du modèle
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Appel de la méthode de base
+        base.OnModelCreating(modelBuilder);
 
-    // Application des configurations de l'assembly
-    modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductConfiguration).Assembly);
-  }
+        // Application des configurations de l'assembly
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(ProductConfiguration).Assembly);
+    }
 }
