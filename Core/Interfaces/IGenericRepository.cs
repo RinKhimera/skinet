@@ -27,4 +27,6 @@ public interface IGenericRepository<T>
     Task<bool> SaveAllAsync();
 
     bool Exists(int id);
+
+    Task<int> CountAsync(ISpecification<T> spec);
 }
