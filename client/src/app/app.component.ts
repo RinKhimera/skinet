@@ -9,7 +9,7 @@ import { Product } from './shared/models/product'
 
 @Component({
   selector: 'app-root',
-  imports: [HeaderComponent, ShopComponent, RouterOutlet],
+  imports: [HeaderComponent, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
