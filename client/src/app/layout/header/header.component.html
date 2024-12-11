@@ -24,10 +24,11 @@
 
     <div class="flex items-center gap-3">
       <a
-        href=""
-        matBadge="5"
-        matBadgeSize="large"
         class="custom-badge mr-2 mt-2"
+        matBadge="{{ cartService.itemCount() }}"
+        matBadgeSize="large"
+        routerLink="/cart"
+        routerLinkActive="active"
       >
         <mat-icon>shopping_cart</mat-icon>
       </a>
