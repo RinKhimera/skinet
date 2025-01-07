@@ -30,5 +30,21 @@ public class StoreContextSeed
             // Sauvegarde les changements dans la base de données
             await context.SaveChangesAsync();
         }
+
+        if (!context.DeliveryMethods.Any())
+        {
+            var dmData = await File.ReadAllTextAsync(
+                "../Infrastructure/Data/SeedData/delivery.json"
+            );
+
+            var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(dmData);
+
+            if (methods == null)
+                return;
+
+            context.DeliveryMethods.AddRange(methods);
+
+            await context.SaveChangesAsync();
+        }
     }
 }

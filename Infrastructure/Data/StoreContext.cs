@@ -14,6 +14,8 @@ public class StoreContext(DbContextOptions options) : IdentityDbContext<AppUser>
 
     public required DbSet<Address> Addresses { get; set; }
 
+    public required DbSet<DeliveryMethod> DeliveryMethods { get; set; }
+
     // Méthode appelée lors de la création du modèle
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
